@@ -1,0 +1,54 @@
+#Use this entire code for your reference, change the parameters as required.
+- hosts: 13.126.153.160
+  become: yes
+  vars:
+  - dir: "/nn"
+  - ip: 13.126.153.160
+
+  tasks:
+  - command: "sudo rpm -ivh jdk.rpm"
+    ignore_errors: yes
+
+  - command: "sudo rpm -ivh hadoop.rpm --force"
+    ignore_errors: yes
+
+  - command: "sudo mkdir {{dir}}"
+    ignore_errors: yes
+
+  - template:
+          src: "core-site.xml"
+          dest: "/etc/hadoop/core-site.xml"
+  - template:
+          src: "hdfs-site.xml"
+          dest: "/etc/hadoop/hdfs-site.xml"
+
+  - shell: "echo Y | sudo hadoop namenode -format"
+
+  - command: "sudo hadoop-daemon.sh start namenode"
+
+
+- hosts: 13.235.70.179
+  become: yes
+  vars:
+  - dir: "/dn"
+  - ip: 13.126.153.160
+
+  tasks:
+  - command: "sudo rpm -ivh jdk.rpm"
+    ignore_errors: yes
+
+  - command: "sudo rpm -ivh hadoop.rpm --force"
+    ignore_errors: yes
+
+  - command: "sudo mkdir {{dir}}"
+    ignore_errors: yes
+
+  - template:
+          src: "core-site.xml"
+          dest: "/etc/hadoop/core-site.xml"
+  - template:
+          src: "hdfs-site.xml"
+          dest: "/etc/hadoop/hdfs-site.xml"
+
+  - command: "sudo hadoop-daemon.sh start datanode"
+
